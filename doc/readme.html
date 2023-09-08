@@ -1,1 +1,493 @@
 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>f3 - Fight Flash Fraud &#8212; f3 8.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://assets.readthedocs.org/static/css/badge_only.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://assets.readthedocs.org/static/javascript/readthedocs-doc-embed.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="f3 - Fight Flash Fraud" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  
+<!-- RTD Extra Head -->
+
+<!-- 
+Always link to the latest version, as canonical.
+http://docs.readthedocs.org/en/latest/canonical.html
+-->
+<link rel="canonical" href="https://fight-flash-fraud.readthedocs.io/en/latest/introduction.html" />
+
+<link rel="stylesheet" href="https://assets.readthedocs.org/static/css/readthedocs-doc-embed.css" type="text/css" />
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "build_date": "2020-10-29T13:27:39Z", "builder": "sphinx", "canonical_url": "https://fight-flash-fraud.readthedocs.io/en/latest/", "commit": "4dae4eaf", "docroot": "/doc/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "introduction", "programming_language": "c", "project": "fight-flash-fraud", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "alabaster", "user_analytics_code": "", "version": "stable"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+<script type="text/javascript" src="https://assets.readthedocs.org/static/javascript/readthedocs-analytics.js" async="async"></script>
+
+<!-- end RTD <extrahead> -->
+</head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="f3-fight-flash-fraud">
+<h1>f3 - Fight Flash Fraud<a class="headerlink" href="#f3-fight-flash-fraud" title="Permalink to this headline">¶</a></h1>
+<p>f3 is a simple tool that tests flash cards capacity and performance to
+see if they live up to claimed specifications. It fills the device with
+pseudorandom data and then checks if it returns the same on reading.</p>
+<p>F3 stands for Fight Flash Fraud, or Fight Fake Flash.</p>
+<p><strong>Table of Contents</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="#examples">Examples</a></li>
+<li><a class="reference external" href="#installation">Installation</a></li>
+<li><a class="reference external" href="#other-resources">Other resources</a></li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h1>Examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="testing-performance-with-f3read-f3write">
+<h2>Testing performance with f3read/f3write<a class="headerlink" href="#testing-performance-with-f3read-f3write" title="Permalink to this headline">¶</a></h2>
+<p>Use these two programs in this order. f3write will write large files to
+your mounted disk and f3read will check if the flash disk contains
+exactly the written files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./f3write /media/michel/5EBD-5C80/
+$ ./f3read /media/michel/5EBD-5C80/
+</pre></div>
+</div>
+<p>Please replace “/media/michel/5EBD-5C80/” with the appropriate path. USB
+devices are mounted in “/Volumes” on Macs.</p>
+<p>If you have installed f3read and f3write, you can remove the “./” that
+is shown before their names.</p>
+</div>
+<div class="section" id="quick-capacity-tests-with-f3probe">
+<h2>Quick capacity tests with f3probe<a class="headerlink" href="#quick-capacity-tests-with-f3probe" title="Permalink to this headline">¶</a></h2>
+<p>f3probe is the fastest drive test and suitable for large disks because
+it only writes what’s necessary to test the drive. It operates directly
+on the (unmounted) block device and needs to be run as a privileged
+user:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ./f3probe --destructive --time-ops /dev/sdb</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This will destroy any previously stored data on your disk!</p>
+</div>
+</div>
+<div class="section" id="correcting-capacity-to-actual-size-with-f3fix">
+<h2>Correcting capacity to actual size with f3fix<a class="headerlink" href="#correcting-capacity-to-actual-size-with-f3fix" title="Permalink to this headline">¶</a></h2>
+<p>f3fix creates a partition that fits the actual size of the fake drive.
+Use f3probe’s output to determine the parameters for f3fix:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ./f3fix --last-sec=16477878 /dev/sdb</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="download-and-compile">
+<h2>Download and Compile<a class="headerlink" href="#download-and-compile" title="Permalink to this headline">¶</a></h2>
+<p>The files of the stable version of F3 are
+<a class="reference external" href="https://github.com/AltraMayor/f3/releases">here</a>. The
+following command uncompresses the files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ unzip f3-8.0.zip
+</pre></div>
+</div>
+</div>
+<div class="section" id="compile-stable-software-on-linux-or-freebsd">
+<h2>Compile stable software on Linux or FreeBSD<a class="headerlink" href="#compile-stable-software-on-linux-or-freebsd" title="Permalink to this headline">¶</a></h2>
+<p>To build:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<p>If you want to install f3write and f3read, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="compile-stable-software-on-windows-cygwin">
+<h2>Compile stable software on Windows/Cygwin<a class="headerlink" href="#compile-stable-software-on-windows-cygwin" title="Permalink to this headline">¶</a></h2>
+<p>f3write and f3read can be installed on Windows, but currently f3probe, f3fix,
+and f3brew <a class="reference external" href="#the-extra-applications-for-linux">require Linux</a>.  To use them
+on a Windows machine, use the <a class="reference external" href="#docker">Docker Installation</a>.  For f3write
+and f3read, read on.</p>
+<p>If you haven’t already, install the following Cygwin packages and their dependencies:</p>
+<ul class="simple">
+<li><cite>gcc-core</cite></li>
+<li><cite>make</cite></li>
+<li><cite>libargp-devel</cite></li>
+</ul>
+<p>To build, you need special flags:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$LDFLAGS</span><span class="s2"> -Wl,--stack,4000000 -largp&quot;</span>
+make
+</pre></div>
+</div>
+<p>If you want to install f3write and f3read, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install
+</pre></div>
+</div>
+</div>
+<div class="section" id="compile-stable-software-on-apple-mac">
+<h2>Compile stable software on Apple Mac<a class="headerlink" href="#compile-stable-software-on-apple-mac" title="Permalink to this headline">¶</a></h2>
+<p>f3write and f3read can be installed on Mac, but currently f3probe, f3fix, and
+f3brew <a class="reference external" href="#the-extra-applications-for-linux">require Linux</a>.  To use them on
+Mac, use the <a class="reference external" href="#docker">Docker Installation</a>.  For f3write and f3read, read
+on.</p>
+<div class="section" id="using-homebrew">
+<h3>Using HomeBrew<a class="headerlink" href="#using-homebrew" title="Permalink to this headline">¶</a></h3>
+<p>If you have Homebrew already installed in your computer, the command
+below will install F3:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install f3
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-macports">
+<h3>Using MacPorts<a class="headerlink" href="#using-macports" title="Permalink to this headline">¶</a></h3>
+<p>If you use MacPorts instead, use the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>port install f3
+</pre></div>
+</div>
+</div>
+<div class="section" id="compiling-the-latest-development-version-from-the-source-code">
+<h3>Compiling the latest development version from the source code<a class="headerlink" href="#compiling-the-latest-development-version-from-the-source-code" title="Permalink to this headline">¶</a></h3>
+<p>Most of the f3 source code builds fine using XCode, the only dependency
+missing is the GNU C library “argp”. You can build argp from scratch, or
+use the version provided by HomeBrew and MacPorts as “argp-standalone”</p>
+<p>The following steps have been tested on OS X El Capitan 10.11.</p>
+<ol class="arabic">
+<li><p class="first">Install Apple command line tools:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xcode-select --install
+</pre></div>
+</div>
+</li>
+</ol>
+<p>See <a class="reference external" href="http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/">http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/</a>
+for details.</p>
+<ol class="arabic" start="2">
+<li><p class="first">Install Homebrew or MacPorts</p>
+<p>HomeBrew:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/usr/bin/ruby -e <span class="s2">&quot;</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://brew.sh/">https://brew.sh/</a> for details.</p>
+<p>MacPorts: <a class="reference external" href="https://www.macports.org/install.php">https://www.macports.org/install.php</a></p>
+</li>
+<li><p class="first">Install argp library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install argp-standalone
+</pre></div>
+</div>
+<p>See <a class="reference external" href="http://brewformulas.org/ArgpStandalone">http://brewformulas.org/ArgpStandalone</a> and
+<a class="reference external" href="https://www.freshports.org/devel/argp-standalone/">https://www.freshports.org/devel/argp-standalone/</a> for more
+information.</p>
+<p>Or, for MacPorts:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>port install argp-standalone
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://trac.macports.org/browser/trunk/dports/sysutils/f3/Portfile">https://trac.macports.org/browser/trunk/dports/sysutils/f3/Portfile</a>
+for more information.</p>
+</li>
+<li><p class="first">Build F3:</p>
+<p>When using Homebrew, you can just run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
+</pre></div>
+</div>
+<p>When using MacPorts, you will need to pass the location where MacPorts
+installed argp-standalone:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make <span class="nv">ARGP</span><span class="o">=</span>/opt/local
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="quick-start">
+<h3>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h3>
+<p>A pre-built <a class="reference external" href="https://cloud.docker.com/repository/docker/peron/f3">image</a>
+is available over at Docker Hub, ready to be used.  With docker started, just
+run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -it --rm --device &lt;device&gt; peron/f3 &lt;f3-command&gt; <span class="o">[</span>&lt;f3-options&gt;<span class="o">]</span> &lt;device&gt;
+</pre></div>
+</div>
+<p>For example, to probe a drive mounted at /dev/sdb:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run -it --rm --device /dev/sdb peron/f3 f3probe --destructive --time-ops /dev/sdb
+</pre></div>
+</div>
+<p>Optionally, you can also build your own container <em>if</em> you don’t want to use the
+pre-built image.  From this directory, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker build -t f3:latest .
+docker run -it --rm --device &lt;device&gt; f3:latest &lt;f3-command&gt; <span class="o">[</span>&lt;f3-options&gt;<span class="o">]</span> &lt;device&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="drive-permissions-passthrough">
+<h3>Drive Permissions / Passthrough<a class="headerlink" href="#drive-permissions-passthrough" title="Permalink to this headline">¶</a></h3>
+<p>Getting the drive device to map into the Docker container is tricky for Mac and
+Windows.  Passing through devices on Mac and Windows is a well-documented issue
+(<a class="reference external" href="https://github.com/docker/for-mac/issues/3110#issuecomment-456853036">[github]</a>
+<a class="reference external" href="https://devops.stackexchange.com/questions/4572/how-to-pass-a-dev-disk-device-on-macos-into-linux-docker/6076#6076">[stackexchange]</a>
+<a class="reference external" href="https://christopherjmcclellan.wordpress.com/2019/04/21/using-usb-with-docker-for-mac/#tldr">[tty]</a>)
+On Linux it should just work, but on Mac or Windows, Docker tends to map the
+drive as a normal directory rather than a mounted drive and you will get an
+error like <code class="code docutils literal notranslate"><span class="pre">f3probe:</span> <span class="pre">Can't</span> <span class="pre">open</span> <span class="pre">device</span> <span class="pre">'/opt/usb':</span> <span class="pre">Is</span> <span class="pre">a</span> <span class="pre">directory</span></code>, that
+is if you can map it at all.</p>
+<p>To solve this, we can use docker-machine to create a VirtualBox VM
+(boot2docker), in which to run the Docker container.  Since VirtualBox <em>can</em>
+handle device pass-through, we can pass the device through to the VirtualBox VM
+which can then pass the device through to the Docker container.  Milad Alizadeh
+wrote up some good instructions <a class="reference external" href="https://mil.ad/docker/2018/05/06/access-usb-devices-in-container-in-mac.html">here</a>
+which are geared towards USB devices, but it shouldn’t be too hard to adapt to
+other drive types.  Here’s what I typed into my Mac terminal (probably
+similar for Windows, but untested):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-machine create -d virtualbox default
+docker-machine stop
+vboxmanage modifyvm default --usb on
+docker-machine start
+vboxmanage usbfilter add <span class="m">0</span> --target default --name flashdrive --vendorid 0x0123 --productid 0x4567
+<span class="nb">eval</span> <span class="k">$(</span>docker-machine env default<span class="k">)</span>
+</pre></div>
+</div>
+<p>For the usbfilter add command, note that the “name” argument is the new name
+you’re giving the filter so you can name it whatever you want.
+<code class="code docutils literal notranslate"><span class="pre">--vendorid</span></code> and <code class="code docutils literal notranslate"><span class="pre">--productid</span></code> can be found on Mac in “System
+Information” under “USB”. You can also try searching for the right device in
+<code class="code docutils literal notranslate"><span class="pre">vboxmanage</span> <span class="pre">list</span> <span class="pre">usbhost</span></code>.</p>
+<p>Alternatively, you may opt to add the device through the VirtualBox GUI
+application instead:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-machine create -d virtualbox default
+docker-machine stop
+<span class="c1"># open VirtualBox and manually add the drive device before proceeding to the next command</span>
+docker-machine start
+<span class="nb">eval</span> <span class="k">$(</span>docker-machine env default<span class="k">)</span>
+</pre></div>
+</div>
+<p>Once you’ve run the above commands, unplug and replug the flash drive and run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-machine ssh default <span class="s2">&quot;lsblk&quot;</span>
+</pre></div>
+</div>
+<p>to list the devices. Search for the correct drive - the “SIZE” column may be
+helpful in locating the device of interest. For example, <code class="code docutils literal notranslate"><span class="pre">sdb</span></code> is a common
+mount point for a USB drive.  Now you should be able to run the command from
+Quick Start:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --rm -it --device /dev/sdb peron/f3 f3probe --destructive --time-ops /dev/sdb
+</pre></div>
+</div>
+<p>You may find it useful to enter a bash prompt in the Docker container to poke
+around the filesystem:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker run --rm -it --device /dev/sdb peron/f3 bash
+</pre></div>
+</div>
+<p>so that you can run commands like <code class="code docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/dev/*</span></code>.</p>
+</div>
+</div>
+<div class="section" id="the-extra-applications-for-linux">
+<h2>The extra applications for Linux<a class="headerlink" href="#the-extra-applications-for-linux" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-dependencies">
+<h3>Install dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>f3probe and f3brew require version 1 of the library libudev, and f3fix
+requires version 0 of the library libparted to compile. On Ubuntu, you
+can install these libraries with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install libudev1 libudev-dev libparted0-dev
+</pre></div>
+</div>
+<p>On Fedora, you can install these libraries with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo dnf install systemd-devel parted-devel
+</pre></div>
+</div>
+</div>
+<div class="section" id="compile-the-extra-applications">
+<h3>Compile the extra applications<a class="headerlink" href="#compile-the-extra-applications" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make extra
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>The extra applications are only compiled and tested on Linux
+platform.</li>
+<li>Please do not e-mail me saying that you want the extra
+applications to run on your platform; I already know that.</li>
+<li>If you want the extra applications to run on your platform, help
+to port them, or find someone that can port them for you. If you
+do port any of them, please send me a patch to help others.</li>
+<li>The extra applications are f3probe, f3brew, and f3fix.</li>
+</ul>
+</div>
+<p>If you want to install the extra applications, run the following
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install-extra
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="other-resources">
+<h1>Other resources<a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="graphical-user-interfaces">
+<h2>Graphical User Interfaces<a class="headerlink" href="#graphical-user-interfaces" title="Permalink to this headline">¶</a></h2>
+<p>Thanks to our growing community of flash fraud fighters,
+we have the following graphical user interfaces (GUI) available for F3:</p>
+<p><a class="reference external" href="https://github.com/zwpwjwtz/f3-qt">F3 QT</a> is a Linux GUI that uses
+QT. F3 QT supports <code class="docutils literal notranslate"><span class="pre">f3write</span></code>, <code class="docutils literal notranslate"><span class="pre">f3read</span></code>, <code class="docutils literal notranslate"><span class="pre">f3probe</span></code>, and <code class="docutils literal notranslate"><span class="pre">f3fix</span></code>. Author:
+Tianze.</p>
+<p>Please support the above project by testing it and giving feedback to their
+authors. This will make their code improve as it has improved mine.</p>
+</div>
+<div class="section" id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>changelog   - Change log <span class="k">for</span> package maintainers
+f3read.1    - Man page <span class="k">for</span> f3read and f3write
+            In order to <span class="nb">read</span> this manual page, run <span class="sb">`</span>man ./f3read.1<span class="sb">`</span>
+            To install the page, run
+            <span class="sb">`</span>install --owner<span class="o">=</span>root --group<span class="o">=</span>root --mode<span class="o">=</span><span class="m">644</span> f3read.1 /usr/share/man/man1<span class="sb">`</span>
+LICENSE     - License <span class="o">(</span>GPLv3<span class="o">)</span>
+Makefile    - make<span class="o">(</span><span class="m">1</span><span class="o">)</span> file
+README      - This file
+*.h and *.c - C code of F3
+</pre></div>
+</div>
+</div>
+<div class="section" id="bash-scripts">
+<h2>Bash scripts<a class="headerlink" href="#bash-scripts" title="Permalink to this headline">¶</a></h2>
+<p>Although the simple scripts listed in this section are ready for use,
+they are really meant to help you to write your own scripts. So you can
+personalize F3 to your specific needs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>f3write.h2w - Script to create files exactly like H2testw.
+    Use example: <span class="sb">`</span>f3write.h2w /media/michel/5EBD-5C80/<span class="sb">`</span>
+
+log-f3wr    - Script that runs f3write and f3read, and records
+              their output into a log file.
+    Use example: <span class="sb">`</span>log-f3wr log-filename /media/michel/5EBD-5C80/<span class="sb">`</span>
+</pre></div>
+</div>
+<p>Please notice that all scripts and use examples above assume that
+f3write, f3read, and the scripts are in the same folder.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">f3</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">f3 - Fight Flash Fraud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#id1">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#testing-performance-with-f3read-f3write">Testing performance with f3read/f3write</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-capacity-tests-with-f3probe">Quick capacity tests with f3probe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#correcting-capacity-to-actual-size-with-f3fix">Correcting capacity to actual size with f3fix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download-and-compile">Download and Compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compile-stable-software-on-linux-or-freebsd">Compile stable software on Linux or FreeBSD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compile-stable-software-on-windows-cygwin">Compile stable software on Windows/Cygwin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compile-stable-software-on-apple-mac">Compile stable software on Apple Mac</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-extra-applications-for-linux">The extra applications for Linux</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#other-resources">Other resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graphical-user-interfaces">Graphical User Interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bash-scripts">Bash scripts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contribute</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">f3 - Fight Flash Fraud</a></li>
+      <li>Next: <a href="usage.html" title="next chapter">Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Michel Machado.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/introduction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
